@@ -1,0 +1,22 @@
+{
+  "name": "ngui-htmltext",
+  "homepage": "https://github.com/Farcek/ngui-auth",
+  "authors": [
+    "Farcek <farcek@gmail.com>"
+  ],
+  "description": "angular sample  UI",
+  "main": "src/htmltext.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-cookies": "1.5.7",
+    "angular-route": "^1.5.7",
+    "bootstrap": "^3.3.6"
+  }
+}
