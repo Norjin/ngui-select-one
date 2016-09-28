@@ -8,7 +8,7 @@
             return self;
         }
     ]);
-    app.provider("$nguiConfig", function () {
+    app.provider("$nguiSelectOneConfig", function () {
         var baseTemplateUrl = "/tpl-bootstrap";
 
         return {
@@ -24,8 +24,8 @@
             }
         };
     });
-    app.directive('nguiSelectOne', ['$nguiConfig', '$nguiSelectOne', '$http',
-        function ($nguiConfig, $nguiSelectOne, $http) {
+    app.directive('nguiSelectOne', ['$nguiSelectOneConfig', '$nguiSelectOne', '$http',
+        function ($nguiSelectOneConfig, $nguiSelectOne, $http) {
             return {
                 restrict: 'A',
                 scope: {
@@ -35,7 +35,7 @@
                     valueField: '@',
                 },
                 templateUrl: function (elem, attrs) {
-                    return attrs.templateUrl || $nguiConfig.baseTemplateUrl + '/select-one.htm';
+                    return attrs.templateUrl || $nguiSelectOneConfig.baseTemplateUrl + '/select-one.htm';
                 },
                 link: function ($scope) {
                     var isLoad = true, isError = false;
