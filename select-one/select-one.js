@@ -43,13 +43,18 @@
 
                     var searchQ = "";
 
-                    $scope.model = $ngModel ? $ngModel.$viewValue : null;
+                    if ($ngModel) {
 
-                    $scope.$watch('model', function (v) {
-                        if (v && $ngModel) {
-                            $ngModel.$setViewValue(v);
-                        }
-                    });
+                        $ngModel.$render = function () {
+                            $scope.model = $ngModel.$viewValue;
+                        };
+
+                        $scope.$watch('model', function (v) {
+                            if (v && $ngModel) {
+                                $ngModel.$setViewValue(v);
+                            }
+                        });
+                    }
 
                     var isLoad = true, isError = false;
                     var $select = $scope.$select = {
