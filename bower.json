@@ -1,11 +1,11 @@
 {
-  "name": "ngui-htmltext",
-  "homepage": "https://github.com/Farcek/ngui-auth",
+  "name": "ngui-select-one",
+  "homepage": "https://github.com/Farcek/ngui-select-one",
   "authors": [
     "Farcek <farcek@gmail.com>"
   ],
   "description": "angular sample  UI",
-  "main": "src/htmltext.js",
+  "main": "select-one/select-one.js",
   "license": "MIT",
   "ignore": [
     "**/.*",
