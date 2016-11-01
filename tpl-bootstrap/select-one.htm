@@ -1,4 +1,11 @@
-<select class="form-control" ng-model="model"
-        ng-options="it[$select.valueField] as it[$select.labelField] for it in items">
-    <option value="">please select</option>
-</select>
+<div class="input-group">
+	<select class="form-control" ng-model="model" 
+    ng-options="it[$select.valueField] as it[$select.labelField] for it in items"	ng-dblclick="search()">
+        <option value="" >{{ $select.emptyText}}</option>
+        
+    </select>
+	<div class="input-group-btn">
+		<button class="btn btn-default" type="button" ng-click="clear()" ng-if="$select.value" > x </button>
+		<button class="btn btn-default" type="button" ng-click="search()"> ... </button>
+	</div>
+</div>

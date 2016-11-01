@@ -26,20 +26,42 @@
     });
     app.directive('nguiSelectOne', ['$nguiSelectOneConfig', '$nguiSelectOne', '$http',
         function ($nguiSelectOneConfig, $nguiSelectOne, $http) {
+
             return {
                 restrict: 'A',
+                require: '?ngModel',
                 scope: {
-                    model: '=ngModel',
                     srcUri: '@',
                     labelField: '@',
                     valueField: '@',
+                    searchField: '@'
                 },
                 templateUrl: function (elem, attrs) {
                     return attrs.templateUrl || $nguiSelectOneConfig.baseTemplateUrl + '/select-one.htm';
                 },
-                link: function ($scope) {
+                link: function ($scope, $elem, $attr, $ngModel) {
+
+                    var searchQ = "";
+
+                    if ($ngModel) {
+
+                        $ngModel.$render = function () {
+                            $scope.model = $ngModel.$viewValue;
+                        };
+
+                        $scope.$watch('model', function (v) {
+                            if (v && $ngModel) {
+                                $ngModel.$setViewValue(v);
+                            }
+                        });
+                    }
+
                     var isLoad = true, isError = false;
-                    $scope.$select = {
+                    var $select = $scope.$select = {
+                        get value() {
+                            return $ngModel ? $ngModel.$viewValue : null;
+                        },
+
                         get isLoad() {
                             return isLoad;
                         },
@@ -47,26 +69,55 @@
                             return isError;
                         },
                         get labelField() {
-                            return $scope.labelField || 'label'
+                            return $scope.labelField || 'label';
                         },
                         get valueField() {
-                            return $scope.valueField || 'id'
+                            return $scope.valueField || 'id';
+                        },
+                        get searchField() {
+                            return $scope.searchField || 'search';
+                        },
+
+                        get emptyText() {
+                            var txt1 = ($select.value && !$scope.model) ? 'selected value:' + $select.value : 'please select';
+                            var txt2 = "avilable items:" + (Array.isArray($scope.items) ? '' + $scope.items.length : '0');
+                            return txt1 + '; ' + txt2;
                         }
                     };
 
-                    $http.get($scope.srcUri)
-                        .success(function (data) {
-                            $scope.items = data;
-                        })
-                        .error(function (err) {
-                            console.log(err);
-                            isError = true;
-                        })
-                        .finally(function () {
-                            isLoad = false;
-                        });
+                    var load = $scope.load = function (q) {
 
+                        var params = {};
+                        params[$select.searchField] = q;
 
+                        $http.get($scope.srcUri, {
+                            params: params
+                        })
+                            .success(function (data) {
+                                $scope.items = data;
+                            })
+                            .error(function (err) {
+                                isError = true;
+                            })
+                            .finally(function () {
+                                isLoad = false;
+                            });
+                    };
+                    load(searchQ);
+
+                    $scope.search = function () {
+                        searchQ = prompt("search text", searchQ ? searchQ : '');
+                        if (searchQ) {
+                            load(searchQ);
+                        }
+                    };
+
+                    $scope.clear = function () {
+                        $scope.model = undefined;
+                        if ($ngModel) {
+                            $ngModel.$setViewValue(undefined);
+                        }
+                    };
                 }
             };
         }
